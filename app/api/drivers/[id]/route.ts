@@ -1,9 +1,15 @@
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
+type RouteContext = {
+  params: {
+    id: string
+  }
+}
+
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     const body = await request.json()
@@ -19,7 +25,7 @@ export async function PUT(
 
     // Update the driver in the database
     const driver = await prisma.driver.update({
-      where: { id: params.id },
+      where: { id: context.params.id },
       data: {
         firstName,
         lastName,
@@ -40,11 +46,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     await prisma.driver.delete({
-      where: { id: params.id },
+      where: { id: context.params.id },
     })
 
     return NextResponse.json({ success: true })
