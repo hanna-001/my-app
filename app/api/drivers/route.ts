@@ -8,6 +8,7 @@ export async function GET() {
         id: true,
         firstName: true,
         lastName: true,
+        base: true,
       },
       orderBy: {
         lastName: 'asc',
