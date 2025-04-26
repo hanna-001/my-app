@@ -6,6 +6,8 @@ alwaysApply: true
 # Architecture Decisions
 
 ## Tech Stack
+###package manager
+Use npm
 
 ### Frontend
 - **Next.js 14**
