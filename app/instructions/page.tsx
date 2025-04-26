@@ -6,7 +6,7 @@ export default function Instructions() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="prose max-w-none">
             <p className="text-lg text-black mb-6">
-              Welcome to the Instructions page. Here you'll find detailed guidance on how to use our application.
+              Welcome to the Instructions page. Here you&apos;ll find detailed guidance on how to use our application.
             </p>
             <ul className="space-y-4">
               <li className="flex items-start">
