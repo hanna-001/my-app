@@ -1,0 +1,167 @@
+# Architecture Decisions
+
+## Tech Stack
+
+### Frontend
+- **Next.js 14**
+  - App Router for modern routing
+  - Server Components for better performance
+  - Client Components where interactivity is needed
+  - TypeScript for type safety
+
+### UI Components
+- **Shadcn/ui**
+  - Accessible components
+  - Customizable design system
+  - Built on Radix UI primitives
+  - Tailwind CSS for styling
+
+### Database & Backend
+- **Supabase**
+  - PostgreSQL database
+  - Real-time subscriptions
+  - Authentication
+  - Storage
+  - Edge Functions
+
+### ORM
+- **Prisma**
+  - Type-safe database queries
+  - Schema migrations
+  - Database seeding
+  - Query optimization
+
+## Color Scheme
+- Main Color (Blue): `#3a4960`
+  - Used for headers
+  - Primary buttons
+  - Important UI elements
+- Secondary/Highlight (Red): `#913f4f`
+  - Hover states
+  - Accents
+  - Interactive elements
+- Base (Grey): `#d5d5d2`
+  - Borders
+  - Subtle UI elements
+  - Background accents
+
+## Design Principles
+1. **Typography**
+   - Black text for regular content
+   - White backgrounds
+   - Consistent font hierarchy
+   - Clear readability
+
+2. **Layout**
+   - Responsive design
+   - Consistent spacing
+   - Clear visual hierarchy
+   - Mobile-first approach
+
+3. **Components**
+   - Reusable UI components
+   - Consistent styling
+   - Accessible by default
+   - Interactive feedback
+
+## Project Structure
+```
+app/
+├── components/     # Reusable UI components
+├── lib/           # Utility functions and configurations
+├── api/           # API routes
+├── db/            # Database schema and migrations
+└── (routes)/      # Page routes
+```
+
+## Development Guidelines
+1. **Code Organization**
+   - Feature-based structure
+   - Clear separation of concerns
+   - Consistent naming conventions
+   - Type safety with TypeScript
+
+2. **State Management**
+   - Server state with React Query
+   - Client state with React Context
+   - Form state with React Hook Form
+
+3. **API Design**
+   - RESTful endpoints
+   - Type-safe API routes
+   - Error handling
+   - Rate limiting
+
+4. **Security**
+   - Authentication with Supabase
+   - Authorization checks
+   - Input validation
+   - CORS configuration
+
+## Performance Considerations
+1. **Frontend**
+   - Server Components
+   - Image optimization
+   - Code splitting
+   - Lazy loading
+
+2. **Backend**
+   - Database indexing
+   - Query optimization
+   - Caching strategies
+   - Edge functions
+
+## Testing Strategy
+1. **Unit Tests**
+   - Component testing
+   - Utility function testing
+   - API route testing
+
+2. **Integration Tests**
+   - User flows
+   - API integration
+   - Database operations
+
+3. **E2E Tests**
+   - Critical user journeys
+   - Cross-browser testing
+   - Performance testing
+
+## Deployment
+1. **Environment**
+   - Development
+   - Staging
+   - Production
+
+2. **CI/CD**
+   - Automated testing
+   - Build optimization
+   - Deployment checks
+   - Rollback procedures
+
+## Monitoring
+1. **Error Tracking**
+   - Error boundaries
+   - Logging
+   - Alerting
+
+2. **Performance Monitoring**
+   - Core Web Vitals
+   - API response times
+   - Database performance
+
+## Future Considerations
+1. **Scalability**
+   - Database sharding
+   - Caching layers
+   - CDN integration
+
+2. **Features**
+   - Real-time updates
+   - Offline support
+   - PWA capabilities
+
+3. **Maintenance**
+   - Regular updates
+   - Security patches
+   - Performance optimization 
