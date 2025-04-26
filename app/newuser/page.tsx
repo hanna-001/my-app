@@ -1,7 +1,7 @@
 'use client'
 
 import { createUser } from '../actions/userActions'
-import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 
 const initialState = {
@@ -23,7 +23,7 @@ function SubmitButton() {
 }
 
 export default function NewUserPage() {
-  const [state, formAction] = useFormState(createUser, initialState)
+  const [state, formAction] = useActionState(createUser, initialState)
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">

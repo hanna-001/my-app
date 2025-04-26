@@ -40,6 +40,9 @@ export default function RootLayout({
                   <Link href="/instructions" className="text-black hover:text-[#913f4f] transition-colors px-3 py-2 rounded-md text-sm font-medium">
                     Instructions
                   </Link>
+                  <Link href="/newuser" className="text-black hover:text-[#913f4f] transition-colors px-3 py-2 rounded-md text-sm font-medium">
+                    New User
+                  </Link>
                 </nav>
               </div>
             </div>

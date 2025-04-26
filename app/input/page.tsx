@@ -1,37 +1,344 @@
-export default function Input() {
+'use client'
+
+import { createDriver } from '../actions/driverActions'
+import { createVacation } from '../actions/vacationActions'
+import { createAbsence } from '../actions/absenceActions'
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
+import { useEffect, useState } from 'react'
+
+const initialState = {
+  success: false,
+  error: undefined
+}
+
+function SubmitButton({ text }: { text: string }) {
+  const { pending } = useFormStatus()
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-4xl font-bold text-[#3a4960] mb-8 text-center">Contact Us</h1>
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <form className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium text-black">Name</label>
+    <button
+      type="submit"
+      disabled={pending}
+      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+    >
+      {pending ? 'Creating...' : text}
+    </button>
+  )
+}
+
+export default function InputPage() {
+  const [driverState, driverFormAction] = useActionState(createDriver, initialState)
+  const [vacationState, vacationFormAction] = useActionState(createVacation, initialState)
+  const [absenceState, absenceFormAction] = useActionState(createAbsence, initialState)
+  const [drivers, setDrivers] = useState<Array<{ id: string; firstName: string; lastName: string }>>([])
+
+  useEffect(() => {
+    // Fetch drivers when component mounts
+    fetch('/api/drivers')
+      .then(res => res.json())
+      .then(data => setDrivers(data))
+      .catch(err => console.error('Error fetching drivers:', err))
+  }, [])
+
+  return (
+    <div className="max-w-6xl mx-auto mt-10 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Driver Creation Form */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold mb-6">New Driver</h1>
+          
+          {driverState.success && (
+            <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+              Driver created successfully!
+            </div>
+          )}
+          
+          {driverState.error && (
+            <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+              {driverState.error}
+            </div>
+          )}
+
+          <form action={driverFormAction} className="space-y-4">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                First Name
+              </label>
               <input
                 type="text"
-                id="name"
-                className="w-full px-4 py-3 rounded-lg border border-[#d5d5d2] focus:ring-2 focus:ring-[#3a4960] focus:border-transparent transition-all duration-200 ease-in-out"
-                placeholder="Enter your name"
+                id="firstName"
+                name="firstName"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
-            <div className="space-y-2">
-              <label htmlFor="emaill" className="block text-sm font-medium text-black">Email</label>
+
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                Last Name
+              </label>
               <input
-                type="email"
-                id="email"
-                className="w-full px-4 py-3 rounded-lg border border-[#d5d5d2] focus:ring-2 focus:ring-[#3a4960] focus:border-transparent transition-all duration-200 ease-in-out"
-                placeholder="Enter your email"
+                type="text"
+                id="lastName"
+                name="lastName"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
-            <button
-              type="submit"
-              className="w-full bg-[#3a4960] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#913f4f] transform hover:scale-[1.02] transition-all duration-200 ease-in-out shadow-md"
-            >
-              Send Message
-            </button>
+
+            <div>
+              <label htmlFor="base" className="block text-sm font-medium text-gray-700">
+                Base
+              </label>
+              <input
+                type="text"
+                id="base"
+                name="base"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <SubmitButton text="Create Driver" />
+          </form>
+        </div>
+
+        {/* Vacation Request Form */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold mb-6">New Vacation Request</h1>
+          
+          {vacationState.success && (
+            <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+              Vacation request created successfully!
+            </div>
+          )}
+          
+          {vacationState.error && (
+            <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+              {vacationState.error}
+            </div>
+          )}
+
+          <form action={vacationFormAction} className="space-y-4">
+            <div>
+              <label htmlFor="driverId" className="block text-sm font-medium text-gray-700">
+                Driver
+              </label>
+              <select
+                id="driverId"
+                name="driverId"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              >
+                <option value="">Select a driver</option>
+                {drivers.map(driver => (
+                  <option key={driver.id} value={driver.id}>
+                    {driver.firstName} {driver.lastName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
+                Start Date
+              </label>
+              <input
+                type="date"
+                id="startDate"
+                name="startDate"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
+                End Date
+              </label>
+              <input
+                type="date"
+                id="endDate"
+                name="endDate"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="approvalStatus" className="block text-sm font-medium text-gray-700">
+                Approval Status
+              </label>
+              <select
+                id="approvalStatus"
+                name="approvalStatus"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              >
+                <option value="">Select status</option>
+                <option value="angefragt">Angefragt</option>
+                <option value="bestätigt">Bestätigt</option>
+              </select>
+            </div>
+
+            <SubmitButton text="Enter Vacation" />
+          </form>
+        </div>
+
+        {/* Absence Form */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold mb-6">New Absence</h1>
+          
+          {absenceState.success && (
+            <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+              Absence created successfully!
+            </div>
+          )}
+          
+          {absenceState.error && (
+            <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+              {absenceState.error}
+            </div>
+          )}
+
+          <form action={absenceFormAction} className="space-y-4">
+            <div>
+              <label htmlFor="absenceDriverId" className="block text-sm font-medium text-gray-700">
+                Driver
+              </label>
+              <select
+                id="absenceDriverId"
+                name="driverId"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              >
+                <option value="">Select a driver</option>
+                {drivers.map(driver => (
+                  <option key={driver.id} value={driver.id}>
+                    {driver.firstName} {driver.lastName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="absenceStartDate" className="block text-sm font-medium text-gray-700">
+                Start Date
+              </label>
+              <input
+                type="date"
+                id="absenceStartDate"
+                name="startDate"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Start Time Options
+              </label>
+              <div className="mt-2 space-y-2">
+                <div className="flex items-center">
+                  <input
+                    type="time"
+                    id="startTime"
+                    name="startTime"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="flex items-center space-x-4">
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="startPeriod"
+                      value="Ganzer Tag"
+                      className="form-radio"
+                    />
+                    <span className="ml-2">Ganzer Tag</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="startPeriod"
+                      value="Vormittag"
+                      className="form-radio"
+                    />
+                    <span className="ml-2">Vormittag</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="startPeriod"
+                      value="Nachmittag"
+                      className="form-radio"
+                    />
+                    <span className="ml-2">Nachmittag</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="absenceEndDate" className="block text-sm font-medium text-gray-700">
+                End Date (Optional)
+              </label>
+              <input
+                type="date"
+                id="absenceEndDate"
+                name="endDate"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                End Time Options (Optional)
+              </label>
+              <div className="mt-2 space-y-2">
+                <div className="flex items-center">
+                  <input
+                    type="time"
+                    id="endTime"
+                    name="endTime"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="flex items-center space-x-4">
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="endPeriod"
+                      value="Ganzer Tag"
+                      className="form-radio"
+                    />
+                    <span className="ml-2">Ganzer Tag</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="endPeriod"
+                      value="Vormittag"
+                      className="form-radio"
+                    />
+                    <span className="ml-2">Vormittag</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="endPeriod"
+                      value="Nachmittag"
+                      className="form-radio"
+                    />
+                    <span className="ml-2">Nachmittag</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <SubmitButton text="Enter Absence" />
           </form>
         </div>
       </div>
     </div>
-  );
+  )
 } 
