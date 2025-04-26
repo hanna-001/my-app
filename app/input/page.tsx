@@ -15,7 +15,7 @@ export default function Input() {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-black">Email</label>
+              <label htmlFor="emaill" className="block text-sm font-medium text-black">Email</label>
               <input
                 type="email"
                 id="email"
